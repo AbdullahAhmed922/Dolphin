@@ -1,45 +1,21 @@
 # 🐬 Dolphin AI — Next-Gen Multi-Modal AI Assistant
 
 <p align="center">
-  <img src="screenshots/hero-banner.png" alt="Dolphin AI Banner" width="100%" />
-</p>
-
-<p align="center">
   <strong>A production-ready, privacy-first AI Assistant powered by Local Ollama Models with seamless Cloud AI Fallbacks, Real-Time WebRTC Voice Mode, and Multi-Modal Vision capabilities.</strong>
 </p>
 
 <p align="center">
   <a href="#-features">Features</a> •
-  <a href="#-screenshots--demo">Screenshots</a> •
   <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-quick-start">Quick Start</a> •
   <a href="#-architecture">Architecture</a> •
-  <a href="#-how-to-add-your-project-pictures">Upload Pics</a>
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-docker-deployment">Docker</a> •
+  <a href="#-testing--quality-assurance">Testing</a>
 </p>
 
 ---
 
-## 📸 Screenshots & Demo
-
-> **Project Media Area**: Place your app screenshots inside the `screenshots/` directory.
-
-<div align="center">
-
-| 💬 **Interactive Chat & Model Selector** | 🎙️ **Real-Time WebRTC Voice Mode** |
-| :---: | :---: |
-| <img src="screenshots/chat-ui.png" alt="Chat UI" width="450"/> | <img src="screenshots/voice-mode.png" alt="Voice Mode" width="450"/> |
-| *Sleek UI with streaming responses & markdown* | *WebRTC voice interaction via LiveKit Inference* |
-
-| 🖼️ **Multi-Modal Vision Analysis** | 📄 **Document Tray & Management** |
-| :---: | :---: |
-| <img src="screenshots/vision-mode.png" alt="Vision Mode" width="450"/> | <img src="screenshots/document-tray.png" alt="Document Tray" width="450"/> |
-| *Client-side compressed image uploads with vision LLMs* | *Upload, manage, and attach documents on the fly* |
-
-</div>
-
----
-
-## ✨ Features
+## ✨ Key Features
 
 - **🏠 Local-First AI Engine**: Prioritizes local Ollama models (`qwen2.5:3b`, `llama3.2`, `gemma3`, etc.) to run completely offline on your machine for 100% data privacy.
 - **☁️ Automatic Cloud Fallbacks**: Seamlessly fails over to leading cloud providers (Anthropic Claude 3.5, OpenAI GPT-4o, Google Gemini, xAI Grok, Meta Llama) if local models are uninstalled or unreachable.
@@ -68,21 +44,20 @@
 
 ```
 agents/
-├── ai-assistant/
-│   ├── api/                   # FastAPI Backend (Python 3.13)
-│   │   ├── app/
-│   │   │   ├── routes/        # Chat, Health, Models, Voice, Upload endpoints
-│   │   │   ├── providers/     # Ollama, OpenAI, Anthropic, Gemini, Grok plugins
-│   │   │   ├── services/      # Chat orchestrator and fallback logic
-│   │   │   └── voice/         # LiveKit session generator and voice settings
-│   │   └── tests/             # Pytest test suite
-│   ├── web/                   # Next.js Frontend (React 19)
-│   │   ├── app/               # Main layout and page routes
-│   │   ├── components/        # Chat app, Voice bar, Document tray, Photo gallery
-│   │   └── hooks/             # Custom hooks for state management
-│   ├── agent/                 # LiveKit Voice Agent worker
-│   └── docker-compose.yml     # Multi-container orchestration
-└── screenshots/               # Directory for project pictures & screenshots
+└── ai-assistant/
+    ├── api/                   # FastAPI Backend (Python 3.13)
+    │   ├── app/
+    │   │   ├── routes/        # Chat, Health, Models, Voice, Upload endpoints
+    │   │   ├── providers/     # Ollama, OpenAI, Anthropic, Gemini, Grok plugins
+    │   │   ├── services/      # Chat orchestrator and fallback logic
+    │   │   └── voice/         # LiveKit session generator and voice settings
+    │   └── tests/             # Pytest test suite
+    ├── web/                   # Next.js Frontend (React 19)
+    │   ├── app/               # Main layout and page routes
+    │   ├── components/        # Chat app, Voice bar, Document tray, Photo gallery
+    │   └── hooks/             # Custom hooks for state management
+    ├── agent/                 # LiveKit Voice Agent worker
+    └── docker-compose.yml     # Multi-container orchestration
 ```
 
 ---
@@ -138,7 +113,7 @@ uv run python voice_agent.py dev
 
 ## 🐳 Docker Deployment
 
-To launch the complete stack with single command:
+To launch the complete stack with a single command:
 
 ```bash
 cd ai-assistant
@@ -153,25 +128,7 @@ docker compose --profile voice up --build
 
 ---
 
-## 🖼️ How to Add Your Project Pictures
-
-1. Take screenshots of your project in action (or create a hero banner image).
-2. Save your images into the `screenshots/` directory:
-   - `screenshots/hero-banner.png`
-   - `screenshots/chat-ui.png`
-   - `screenshots/voice-mode.png`
-   - `screenshots/vision-mode.png`
-   - `screenshots/document-tray.png`
-3. Commit and push to GitHub:
-   ```bash
-   git add screenshots/ README.md
-   git commit -m "feat: add project screenshots"
-   git push origin main
-   ```
-
----
-
-## 🧪 Quality Assurance & Testing
+## 🧪 Testing & Quality Assurance
 
 ```bash
 # Run backend tests & lint checks
