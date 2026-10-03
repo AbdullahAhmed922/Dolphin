@@ -1,66 +1,88 @@
 # 🐬 Dolphin AI — Next-Gen Multi-Modal AI Assistant
 
-> A production-ready, privacy-first AI Assistant powered by **Local Ollama Models** with seamless **Cloud AI Fallbacks** (OpenAI, Anthropic, Google Gemini, xAI Grok, Meta Llama), featuring **Real-time WebRTC Voice Mode** and **Multi-Modal Vision Capabilities**.
+<p align="center">
+  <img src="screenshots/hero-banner.png" alt="Dolphin AI Banner" width="100%" />
+</p>
+
+<p align="center">
+  <strong>A production-ready, privacy-first AI Assistant powered by Local Ollama Models with seamless Cloud AI Fallbacks, Real-Time WebRTC Voice Mode, and Multi-Modal Vision capabilities.</strong>
+</p>
+
+<p align="center">
+  <a href="#-features">Features</a> •
+  <a href="#-screenshots--demo">Screenshots</a> •
+  <a href="#-tech-stack">Tech Stack</a> •
+  <a href="#-quick-start">Quick Start</a> •
+  <a href="#-architecture">Architecture</a> •
+  <a href="#-how-to-add-your-project-pictures">Upload Pics</a>
+</p>
 
 ---
 
-## 📸 Screenshots & Showcase
+## 📸 Screenshots & Demo
 
-> **Add your project screenshots here!**  
-> Create a `screenshots/` folder in the root directory and save your images there, then replace the image paths below.
+> **Project Media Area**: Place your app screenshots inside the `screenshots/` directory.
 
-| 💬 **Interactive Chat & Model Selection** | 🎙️ **Real-Time Voice Mode** |
+<div align="center">
+
+| 💬 **Interactive Chat & Model Selector** | 🎙️ **Real-Time WebRTC Voice Mode** |
 | :---: | :---: |
-| ![Chat UI Showcase](screenshots/chat-ui.png) | ![Voice Mode Showcase](screenshots/voice-mode.png) |
-| *Sleek dark-mode interface with live streaming & markdown* | *WebRTC voice interaction via LiveKit Inference* |
+| <img src="screenshots/chat-ui.png" alt="Chat UI" width="450"/> | <img src="screenshots/voice-mode.png" alt="Voice Mode" width="450"/> |
+| *Sleek UI with streaming responses & markdown* | *WebRTC voice interaction via LiveKit Inference* |
 
-| 🖼️ **Vision & Multi-Modal Analysis** | 📄 **Document Tray & Management** |
+| 🖼️ **Multi-Modal Vision Analysis** | 📄 **Document Tray & Management** |
 | :---: | :---: |
-| ![Vision Showcase](screenshots/vision-mode.png) | ![Document Tray Showcase](screenshots/document-tray.png) |
+| <img src="screenshots/vision-mode.png" alt="Vision Mode" width="450"/> | <img src="screenshots/document-tray.png" alt="Document Tray" width="450"/> |
 | *Client-side compressed image uploads with vision LLMs* | *Upload, manage, and attach documents on the fly* |
+
+</div>
 
 ---
 
 ## ✨ Features
 
-- **🏠 Local-First Intelligence**: Prioritizes local Ollama models (`qwen2.5:3b`, `llama3.2`, `gemma3`, etc.) to run privately on your machine without cloud dependencies.
-- **☁️ Seamless Cloud Fallbacks**: Automatically falls back to leading cloud AI providers (Anthropic Claude, OpenAI GPT-4o, Google Gemini, xAI Grok, Meta Llama) if local models are uninstalled or offline.
-- **🎙️ Real-Time Voice Mode (WebRTC)**: Ultra-low latency voice conversations powered by LiveKit Cloud, complete with turn detection, interruption handling, speech-to-text (STT), and text-to-speech (TTS).
-- **👁️ Privacy-Preserving Vision**: Drag-and-drop or paste up to 5 photos per message. Images are automatically scaled to 2048px on the client side and sanitized (EXIF & GPS metadata removed) before processing.
-- **📄 Document Processing & Attachments**: Attach and analyze documents natively alongside chat sessions.
-- **⚡ Dynamic Model Picker**: Detects installed Ollama models and available Cloud API keys live without requiring app restarts.
-- **💾 Local History**: Stores chat transcripts and image attachments locally in IndexedDB for maximum user privacy.
-- **🎨 Premium UI/UX**: Built with Next.js 16, React 19, Tailwind CSS, and shadcn/ui with dark mode and smooth animations.
+- **🏠 Local-First AI Engine**: Prioritizes local Ollama models (`qwen2.5:3b`, `llama3.2`, `gemma3`, etc.) to run completely offline on your machine for 100% data privacy.
+- **☁️ Automatic Cloud Fallbacks**: Seamlessly fails over to leading cloud providers (Anthropic Claude 3.5, OpenAI GPT-4o, Google Gemini, xAI Grok, Meta Llama) if local models are uninstalled or unreachable.
+- **🎙️ Real-Time Voice Conversations**: Powered by LiveKit Cloud WebRTC, featuring speech-to-text (STT), turn detection, turn interruption, and text-to-speech (TTS).
+- **👁️ Privacy-First Vision**: Supports photo analysis with client-side image scaling (2048px max edge) and automatic EXIF/GPS metadata removal before sending to models.
+- **📄 Native Document Handling**: Upload, preview, and process text and document files directly within your chat conversations.
+- **⚡ Dynamic Live Model Switching**: Automatically populates available Ollama models and cloud provider models dynamically without restarting services.
+- **💾 Local History Storage**: Full chat history and image attachments are stored safely in IndexedDB inside the user's browser.
+- **🎨 Premium UX**: Modern Next.js 16 App Router UI with Tailwind CSS, shadcn/ui components, dynamic voice visualizer, and custom dark mode styling.
 
 ---
 
-## 🛠️ Technology Stack
+## 🛠️ Tech Stack
 
-| Component | Technologies Used |
+| Tier | Technologies |
 | :--- | :--- |
-| **Frontend** | Node.js 24, Next.js 16 (App Router), React 19, TypeScript 7, Tailwind CSS, shadcn/ui |
-| **Backend API** | Python 3.13, FastAPI, `uv` Package Manager, Ruff, Pytest, Ollama SDK, OpenAI & Anthropic SDKs |
-| **Voice Agent** | LiveKit Agent Framework, Python 3.13, LiveKit Cloud Inference Engine |
-| **Local AI Engine** | Ollama (`localhost:11434`) |
-| **Deployment** | Docker & Docker Compose |
+| **Frontend** | Node.js 24, Next.js 16 (App Router), React 19, TypeScript 7, Tailwind CSS 4, shadcn/ui, Lucide Icons |
+| **Backend API** | Python 3.13, FastAPI, `uv` Package Manager, Ruff, Pytest, Ollama Python SDK, OpenAI & Anthropic SDKs |
+| **Voice Agent** | LiveKit Agent Framework (Python), LiveKit Cloud Inference Engine |
+| **Local AI** | Ollama Engine (`localhost:11434`) |
+| **Containers** | Docker, Docker Compose |
 
 ---
 
-## 🏗️ Project Architecture
+## 🏗️ Architecture & Project Structure
 
 ```
 agents/
 ├── ai-assistant/
-│   ├── api/             # FastAPI backend service (Python 3.13)
-│   │   ├── app/         # Routes, core settings, providers, voice endpoints
-│   │   └── tests/       # Pytest test suite
-│   ├── web/             # Next.js frontend application (React 19)
-│   │   ├── app/         # App router pages and global styles
-│   │   ├── components/  # Chat UI, Voice visualizer, Photo gallery, Document tray
-│   │   └── hooks/       # Custom React hooks (use-chat, use-voice, use-models)
-│   ├── agent/           # LiveKit Voice Agent worker
-│   └── docker-compose.yml # Containerized orchestration
-└── screenshots/         # Directory for project showcase images
+│   ├── api/                   # FastAPI Backend (Python 3.13)
+│   │   ├── app/
+│   │   │   ├── routes/        # Chat, Health, Models, Voice, Upload endpoints
+│   │   │   ├── providers/     # Ollama, OpenAI, Anthropic, Gemini, Grok plugins
+│   │   │   ├── services/      # Chat orchestrator and fallback logic
+│   │   │   └── voice/         # LiveKit session generator and voice settings
+│   │   └── tests/             # Pytest test suite
+│   ├── web/                   # Next.js Frontend (React 19)
+│   │   ├── app/               # Main layout and page routes
+│   │   ├── components/        # Chat app, Voice bar, Document tray, Photo gallery
+│   │   └── hooks/             # Custom hooks for state management
+│   ├── agent/                 # LiveKit Voice Agent worker
+│   └── docker-compose.yml     # Multi-container orchestration
+└── screenshots/               # Directory for project pictures & screenshots
 ```
 
 ---
@@ -68,53 +90,44 @@ agents/
 ## 🚀 Quick Start Guide
 
 ### Prerequisites
-- **Node.js** 20.9+ or 24+
-- **Python** 3.13+ with [`uv`](https://docs.astral.sh/uv/) installed
-- **Ollama** (Optional, for local AI model support): [Download Ollama](https://ollama.com)
+- **Node.js** v20.9+ or v24+
+- **Python** v3.13+ with [`uv`](https://docs.astral.sh/uv/) installed
+- **Ollama** (Optional, for running local models): [Download Ollama](https://ollama.com)
 
 ---
 
-### Option A: Local Development Setup
-
-#### 1. Local AI Models (Optional but Recommended)
+### Step 1: Run Local Models (Optional)
 ```bash
 ollama pull llama3.2
 ollama pull qwen2.5:3b
 ```
 
-#### 2. Backend API
+### Step 2: Start Backend API
 ```bash
 cd ai-assistant/api
 uv sync
-
-# Configure Environment Variables
 cp .env.example .env
-# (Optional) Add your API keys for OpenAI, Anthropic, Gemini, or LiveKit in .env
 
-# Run Dev Server (Starts on http://localhost:8000)
+# Start FastAPI dev server (Runs on http://localhost:8000)
 uv run fastapi dev app/main.py
 ```
 
-#### 3. Frontend Web Client
+### Step 3: Start Frontend Web Client
 ```bash
-# Open a new terminal window
+# Open a new terminal
 cd ai-assistant/web
 npm install
-
-# Configure Environment Variables
 cp .env.example .env.local
 
-# Run Dev Server (Starts on http://localhost:3000)
+# Start Next.js dev server (Runs on http://localhost:3000)
 npm run dev
 ```
 
-#### 4. LiveKit Voice Agent (Optional)
+### Step 4: Start LiveKit Voice Agent (Optional)
 ```bash
-# Open a new terminal window (API must be running)
+# Open a new terminal (API must be running first)
 cd ai-assistant/agent
 uv sync
-
-# Configure LiveKit credentials in .env
 cp .env.example .env
 
 # Run Voice Agent
@@ -123,84 +136,51 @@ uv run python voice_agent.py dev
 
 ---
 
-### Option B: Docker Setup
+## 🐳 Docker Deployment
 
-Run all services (API, Web, and optionally Voice Agent) via Docker Compose:
+To launch the complete stack with single command:
 
 ```bash
 cd ai-assistant
-
-# Copy and configure environment variables
 cp api/.env.example api/.env
 
-# Build and start services
+# Build and launch all services
 docker compose up --build
 
-# (Optional) Start with Voice Agent profile
+# Or include Voice Agent container:
 docker compose --profile voice up --build
 ```
 
 ---
 
-## ⚙️ Environment Variables
+## 🖼️ How to Add Your Project Pictures
 
-### Backend (`ai-assistant/api/.env`)
-```env
-# Server Config
-HOST=0.0.0.0
-PORT=8000
-ENVIRONMENT=development
-ALLOW_CLOUD_FALLBACK=true
-
-# Ollama Config
-OLLAMA_BASE_URL=http://localhost:11434
-
-# Cloud AI API Keys (Optional)
-OPENAI_API_KEY=your_openai_key_here
-ANTHROPIC_API_KEY=your_anthropic_key_here
-GEMINI_API_KEY=your_gemini_key_here
-GROK_API_KEY=your_grok_key_here
-
-# LiveKit Voice Credentials (Optional)
-LIVEKIT_URL=wss://your-project.livekit.cloud
-LIVEKIT_API_KEY=your_livekit_api_key
-LIVEKIT_API_SECRET=your_livekit_api_secret
-```
-
----
-
-## 🖼️ How to Upload Project Screenshots
-
-To make your repository look amazing on GitHub:
-
-1. **Take Screenshots**: Capture your app running (e.g. Chat UI, Voice Bar active, Vision upload, Document tray).
-2. **Save Images**: Place the images inside the `screenshots/` directory at the root of the repository:
+1. Take screenshots of your project in action (or create a hero banner image).
+2. Save your images into the `screenshots/` directory:
+   - `screenshots/hero-banner.png`
    - `screenshots/chat-ui.png`
    - `screenshots/voice-mode.png`
    - `screenshots/vision-mode.png`
    - `screenshots/document-tray.png`
-3. **Commit & Push**:
+3. Commit and push to GitHub:
    ```bash
-   git add screenshots/
-   git commit -m "Add project screenshots"
+   git add screenshots/ README.md
+   git commit -m "feat: add project screenshots"
    git push origin main
    ```
-The image gallery table at the top of this README will automatically display your screenshots!
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## 🧪 Quality Assurance & Testing
 
-### Run Backend Tests & Linting
 ```bash
+# Run backend tests & lint checks
 cd ai-assistant/api
 uv run ruff check .
 uv run ruff format --check .
 uv run pytest
-```
 
-### Run Frontend Typecheck & Build Validation
-```bash
+# Run frontend type check & production build validation
 cd ai-assistant/web
 npm run typecheck
 npm run build
@@ -210,4 +190,4 @@ npm run build
 
 ## 📄 License
 
-This project is licensed under the **MIT License**. Feel free to customize and extend it for your own personal or commercial projects.
+Distributed under the **MIT License**. See `LICENSE` for more information.
