@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  CheckIcon,
   ChevronDownIcon,
   CloudIcon,
   EyeIcon,
@@ -16,8 +17,6 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
-  DropdownMenuRadioGroup,
-  DropdownMenuRadioItem,
   DropdownMenuSeparator,
   DropdownMenuSub,
   DropdownMenuSubContent,
@@ -28,9 +27,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import type { UseModels } from "@/hooks/use-models";
 import { formatBytes } from "@/lib/helpers";
 import type { ModelInfo } from "@/lib/types";
-
-const AUTO = "auto";
-const SEP = "::";
 
 function SeesImages({ model }: { model: ModelInfo }) {
   if (!model.vision) return null;
@@ -65,11 +61,12 @@ export function ModelPicker({
   const cloudFailed = cloud.filter((p) => p.configured && !p.available);
   const cloudMissing = cloud.filter((p) => !p.configured);
 
-  const value = selection ? `${selection.provider}${SEP}${selection.model}` : AUTO;
-  const onChange = (v: string) => {
-    if (v === AUTO) return select(null);
-    const [provider, ...rest] = v.split(SEP);
-    select({ provider, model: rest.join(SEP) });
+  const isAuto = !selection;
+  const isSelected = (provider: string, id: string) =>
+    selection?.provider === provider && selection?.model === id;
+
+  const handleSelect = (sel: { provider: string; model: string } | null) => {
+    select(sel);
   };
 
   const label = effective
@@ -93,86 +90,115 @@ export function ModelPicker({
           <ChevronDownIcon className="text-muted-foreground" />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="start" className="w-80">
+      <DropdownMenuContent align="start" className="w-80 max-h-[85vh] overflow-y-auto">
         {error && (
           <p className="px-2 py-2 text-sm text-destructive">
             {error}
           </p>
         )}
 
-        <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
-          <DropdownMenuRadioItem value={AUTO} className="items-start">
-            <SparklesIcon className="mt-0.5" />
+        <DropdownMenuItem
+          onSelect={() => handleSelect(null)}
+          className="items-start justify-between cursor-pointer"
+        >
+          <div className="flex items-start gap-2">
+            <SparklesIcon className="mt-0.5 size-4 text-primary shrink-0" />
             <span className="flex flex-col">
-              <span>Auto</span>
+              <span className="font-medium">Auto</span>
               <span className="text-xs text-muted-foreground">
-                Local model first, cloud if unavailable. With photos, picks a model that can
-                see images.
+                Local model first, cloud fallback. Picks vision model for photos.
               </span>
             </span>
-          </DropdownMenuRadioItem>
+          </div>
+          {isAuto && <CheckIcon className="size-4 shrink-0 text-primary" />}
+        </DropdownMenuItem>
 
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel className="flex items-center gap-1.5">
-            <HardDriveIcon className="size-3.5" /> Local · Ollama
-          </DropdownMenuLabel>
-          {local?.models.map((m) => (
-            <DropdownMenuRadioItem key={m.id} value={`${m.provider}${SEP}${m.id}`}>
-              <span className="truncate">{m.name}</span>
+        <DropdownMenuSeparator />
+        <DropdownMenuLabel className="flex items-center gap-1.5">
+          <HardDriveIcon className="size-3.5" /> Local · Ollama
+        </DropdownMenuLabel>
+        {local?.models.map((m) => {
+          const active = isSelected(m.provider, m.id);
+          return (
+            <DropdownMenuItem
+              key={m.id}
+              onSelect={() => handleSelect({ provider: m.provider, model: m.id })}
+              className="flex items-center gap-2 cursor-pointer"
+            >
+              {active ? (
+                <CheckIcon className="size-4 shrink-0 text-primary" />
+              ) : (
+                <div className="size-4 shrink-0" />
+              )}
+              <span className="truncate font-medium">{m.name}</span>
               <SeesImages model={m} />
-              <span className="ml-auto pl-2 text-xs text-muted-foreground">
+              <span className="ml-auto pl-2 text-xs text-muted-foreground shrink-0">
                 {[m.parameter_size, formatBytes(m.size_bytes)].filter(Boolean).join(" · ")}
               </span>
-            </DropdownMenuRadioItem>
-          ))}
-          {local && !local.models.length && (
-            <p className="px-2 pb-2 text-xs leading-5 text-muted-foreground">
-              {local.available ? "No models installed. " : "Ollama isn't running. "}
-              Run <code className="rounded bg-muted px-1 font-mono">ollama pull llama3.2</code>
-              {cloudReady.length ? " — cloud models are used meanwhile." : "."}
-            </p>
-          )}
+            </DropdownMenuItem>
+          );
+        })}
+        {local && !local.models.length && (
+          <p className="px-2 pb-2 text-xs leading-5 text-muted-foreground">
+            {local.available ? "No models installed. " : "Ollama isn't running. "}
+            Run <code className="rounded bg-muted px-1 font-mono">ollama pull llama3.2</code>
+            {cloudReady.length ? " — cloud models are used meanwhile." : "."}
+          </p>
+        )}
 
-          <DropdownMenuSeparator />
-          <DropdownMenuLabel className="flex items-center gap-1.5">
-            <CloudIcon className="size-3.5" /> Cloud (fallback)
-          </DropdownMenuLabel>
-          {cloudReady.map((p) => (
-            <DropdownMenuSub key={p.id}>
-              <DropdownMenuSubTrigger>
-                {p.label}
-                <span className="ml-auto text-xs text-muted-foreground">{p.models.length}</span>
-              </DropdownMenuSubTrigger>
-              <DropdownMenuSubContent className="max-h-80 w-72 overflow-y-auto">
-                <DropdownMenuRadioGroup value={value} onValueChange={onChange}>
-                  {p.models.map((m) => (
-                    <DropdownMenuRadioItem key={m.id} value={`${m.provider}${SEP}${m.id}`}>
-                      <span className="truncate">{m.name}</span>
-                      <span className="ml-auto pl-2">
-                        <SeesImages model={m} />
-                      </span>
-                    </DropdownMenuRadioItem>
-                  ))}
-                </DropdownMenuRadioGroup>
-              </DropdownMenuSubContent>
-            </DropdownMenuSub>
-          ))}
-          {cloudFailed.map((p) => (
-            <p key={p.id} className="px-2 py-1 text-xs text-muted-foreground">
-              {p.label}: {p.error ?? "unavailable"}
-            </p>
-          ))}
-          {!cloudReady.length && !cloudFailed.length && (
-            <p className="px-2 pb-2 text-xs leading-5 text-muted-foreground">
-              No cloud keys configured. Add one to <code className="font-mono">api/.env</code>.
-            </p>
-          )}
-          {cloudMissing.length > 0 && cloudReady.length > 0 && (
-            <p className="px-2 pb-1 text-xs text-muted-foreground">
-              Not configured: {cloudMissing.map((p) => p.label).join(", ")}
-            </p>
-          )}
-        </DropdownMenuRadioGroup>
+        {cloudReady.length > 0 && (
+          <>
+            <DropdownMenuSeparator />
+            <DropdownMenuLabel className="flex items-center gap-1.5">
+              <CloudIcon className="size-3.5" /> Cloud (fallback)
+            </DropdownMenuLabel>
+            {cloudReady.map((p) => (
+              <DropdownMenuSub key={p.id}>
+                <DropdownMenuSubTrigger>
+                  {p.label}
+                  <span className="ml-auto text-xs text-muted-foreground">{p.models.length}</span>
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="max-h-80 w-72 overflow-y-auto">
+                  {p.models.map((m) => {
+                    const active = isSelected(m.provider, m.id);
+                    return (
+                      <DropdownMenuItem
+                        key={m.id}
+                        onSelect={() => handleSelect({ provider: m.provider, model: m.id })}
+                        className="flex items-center gap-2 cursor-pointer"
+                      >
+                        {active ? (
+                          <CheckIcon className="size-4 shrink-0 text-primary" />
+                        ) : (
+                          <div className="size-4 shrink-0" />
+                        )}
+                        <span className="truncate font-medium">{m.name}</span>
+                        <span className="ml-auto pl-2">
+                          <SeesImages model={m} />
+                        </span>
+                      </DropdownMenuItem>
+                    );
+                  })}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
+            ))}
+          </>
+        )}
+        {cloudFailed.map((p) => (
+          <p key={p.id} className="px-2 py-1 text-xs text-muted-foreground">
+            {p.label}: {p.error ?? "unavailable"}
+          </p>
+        ))}
+        {!cloudReady.length && !cloudFailed.length && (
+          <p className="px-2 pb-2 text-xs leading-5 text-muted-foreground">
+            No cloud keys configured. Add one to <code className="font-mono">api/.env</code>.
+          </p>
+        )}
+        {cloudMissing.length > 0 && cloudReady.length > 0 && (
+          <p className="px-2 pb-1 text-xs text-muted-foreground">
+            Not configured: {cloudMissing.map((p) => p.label).join(", ")}
+          </p>
+        )}
 
         <DropdownMenuSeparator />
         <DropdownMenuItem
@@ -180,6 +206,7 @@ export function ModelPicker({
             e.preventDefault();
             void refresh();
           }}
+          className="cursor-pointer"
         >
           <RefreshCwIcon className={loading ? "animate-spin" : undefined} />
           Refresh models

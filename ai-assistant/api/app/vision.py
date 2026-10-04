@@ -7,10 +7,19 @@ families. `VISION_MODELS` in .env adds patterns when a rule misses a model.
 
 from fnmatch import fnmatch
 
-OLLAMA_VISION_FAMILIES = ("clip", "mllama", "qwen25vl", "qwen2vl", "gemma3", "mistral3", "llama4")
+OLLAMA_VISION_FAMILIES = (
+    "clip",
+    "mllama",
+    "qwen25vl",
+    "qwen2vl",
+    "gemma3",
+    "gemma4",
+    "mistral3",
+    "llama4",
+)
 OLLAMA_VISION_NAMES = (
     "llava", "bakllava", "vision", "moondream", "minicpm-v", "qwen2.5vl", "qwen2-vl", "qwen3-vl",
-    "gemma3", "llama4", "mistral-small3.1", "mistral-small3.2", "granite3.2-vision",
+    "gemma3", "gemma4", "llama4", "mistral-small3.1", "mistral-small3.2", "granite3.2-vision",
 )  # fmt: skip
 
 

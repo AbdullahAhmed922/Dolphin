@@ -10,14 +10,55 @@ logger = logging.getLogger(__name__)
 
 # File extensions grouped by category.
 TEXT_EXTENSIONS = {
-    ".txt", ".md", ".csv", ".json", ".xml", ".yaml", ".yml", ".toml",
-    ".ini", ".cfg", ".conf", ".log", ".env", ".gitignore", ".dockerignore",
+    ".txt",
+    ".md",
+    ".csv",
+    ".json",
+    ".xml",
+    ".yaml",
+    ".yml",
+    ".toml",
+    ".ini",
+    ".cfg",
+    ".conf",
+    ".log",
+    ".env",
+    ".gitignore",
+    ".dockerignore",
 }
 CODE_EXTENSIONS = {
-    ".py", ".js", ".ts", ".tsx", ".jsx", ".java", ".c", ".cpp", ".h", ".hpp",
-    ".cs", ".go", ".rs", ".rb", ".php", ".swift", ".kt", ".scala", ".r",
-    ".sql", ".sh", ".bash", ".zsh", ".ps1", ".bat", ".cmd",
-    ".html", ".css", ".scss", ".less", ".vue", ".svelte",
+    ".py",
+    ".js",
+    ".ts",
+    ".tsx",
+    ".jsx",
+    ".java",
+    ".c",
+    ".cpp",
+    ".h",
+    ".hpp",
+    ".cs",
+    ".go",
+    ".rs",
+    ".rb",
+    ".php",
+    ".swift",
+    ".kt",
+    ".scala",
+    ".r",
+    ".sql",
+    ".sh",
+    ".bash",
+    ".zsh",
+    ".ps1",
+    ".bat",
+    ".cmd",
+    ".html",
+    ".css",
+    ".scss",
+    ".less",
+    ".vue",
+    ".svelte",
 }
 PDF_EXTENSIONS = {".pdf"}
 ALL_ALLOWED = TEXT_EXTENSIONS | CODE_EXTENSIONS | PDF_EXTENSIONS
@@ -39,16 +80,42 @@ def allowed_extension(filename: str) -> bool:
 def _language_label(ext: str) -> str:
     """Return a Markdown code-fence language hint for an extension."""
     mapping = {
-        ".py": "python", ".js": "javascript", ".ts": "typescript",
-        ".tsx": "tsx", ".jsx": "jsx", ".java": "java", ".c": "c",
-        ".cpp": "cpp", ".h": "c", ".hpp": "cpp", ".cs": "csharp",
-        ".go": "go", ".rs": "rust", ".rb": "ruby", ".php": "php",
-        ".swift": "swift", ".kt": "kotlin", ".scala": "scala",
-        ".r": "r", ".sql": "sql", ".sh": "bash", ".bash": "bash",
-        ".zsh": "zsh", ".ps1": "powershell", ".bat": "batch",
-        ".html": "html", ".css": "css", ".scss": "scss", ".less": "less",
-        ".vue": "vue", ".svelte": "svelte", ".json": "json",
-        ".xml": "xml", ".yaml": "yaml", ".yml": "yaml", ".toml": "toml",
+        ".py": "python",
+        ".js": "javascript",
+        ".ts": "typescript",
+        ".tsx": "tsx",
+        ".jsx": "jsx",
+        ".java": "java",
+        ".c": "c",
+        ".cpp": "cpp",
+        ".h": "c",
+        ".hpp": "cpp",
+        ".cs": "csharp",
+        ".go": "go",
+        ".rs": "rust",
+        ".rb": "ruby",
+        ".php": "php",
+        ".swift": "swift",
+        ".kt": "kotlin",
+        ".scala": "scala",
+        ".r": "r",
+        ".sql": "sql",
+        ".sh": "bash",
+        ".bash": "bash",
+        ".zsh": "zsh",
+        ".ps1": "powershell",
+        ".bat": "batch",
+        ".html": "html",
+        ".css": "css",
+        ".scss": "scss",
+        ".less": "less",
+        ".vue": "vue",
+        ".svelte": "svelte",
+        ".json": "json",
+        ".xml": "xml",
+        ".yaml": "yaml",
+        ".yml": "yaml",
+        ".toml": "toml",
         ".md": "markdown",
     }
     return mapping.get(ext.lower(), "")
@@ -102,7 +169,9 @@ def extract_text(content: bytes, filename: str) -> str:
         formatted = text.rstrip()
 
     if len(formatted) > MAX_EXTRACTED_CHARS:
-        formatted = formatted[:MAX_EXTRACTED_CHARS] + f"\n\n[Truncated — {len(text):,} characters total]"
+        formatted = (
+            formatted[:MAX_EXTRACTED_CHARS] + f"\n\n[Truncated — {len(text):,} characters total]"
+        )
     return formatted
 
 

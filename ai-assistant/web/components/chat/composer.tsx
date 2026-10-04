@@ -76,8 +76,7 @@ export function Composer({
   };
 
   const onKeyDown = (e: KeyboardEvent<HTMLTextAreaElement>) => {
-    const touch = window.matchMedia("(hover: none)").matches;
-    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing && !touch) {
+    if (e.key === "Enter" && !e.shiftKey && !e.nativeEvent.isComposing) {
       e.preventDefault();
       submit();
     }
@@ -105,7 +104,13 @@ export function Composer({
   return (
     <form
       onSubmit={submit}
-      className="mx-auto w-full max-w-3xl rounded-3xl border bg-card p-2.5 pl-4 shadow-sm transition-colors focus-within:border-ring"
+      onClick={(e) => {
+        // Focus textarea if click is not on a button or menu
+        if ((e.target as HTMLElement).tagName !== "BUTTON" && !(e.target as HTMLElement).closest("button")) {
+          ref.current?.focus();
+        }
+      }}
+      className="mx-auto w-full max-w-3xl rounded-3xl border bg-card p-2.5 pl-4 shadow-sm transition-colors focus-within:border-ring cursor-text"
     >
       <label htmlFor="composer" className="sr-only">
         Message
@@ -245,41 +250,47 @@ export function Composer({
             </TooltipTrigger>
             <TooltipContent side="top">Stop generating</TooltipContent>
           </Tooltip>
-        ) : hasContent ? (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="submit"
-                size="icon"
-                disabled={!canSend}
-                aria-label={sendLabel}
-                className={cn(
-                  "size-8.5 rounded-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white shadow-sm transition-all duration-150 active:scale-95 shrink-0",
-                  !canSend && "opacity-40 cursor-not-allowed",
-                )}
-              >
-                <ArrowUpIcon className="size-4.5 stroke-[2.5]" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">{sendLabel}</TooltipContent>
-          </Tooltip>
         ) : (
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Button
-                type="button"
-                size="icon"
-                aria-label="Start Voice Mode"
-                onClick={() => {
-                  if (onVoice) onVoice();
-                }}
-                className="size-8.5 rounded-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white shadow-sm transition-all duration-150 active:scale-95 shrink-0"
-              >
-                <SoundwaveIcon className="size-4 text-white" />
-              </Button>
-            </TooltipTrigger>
-            <TooltipContent side="top">Voice Mode</TooltipContent>
-          </Tooltip>
+          <div className="flex items-center gap-1.5 shrink-0">
+            {onVoice && (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    type="button"
+                    size="icon"
+                    variant="ghost"
+                    aria-label="Start Voice Mode"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onVoice();
+                    }}
+                    className="size-8.5 rounded-full text-muted-foreground hover:text-foreground hover:bg-accent transition-all duration-150 active:scale-95 shrink-0"
+                  >
+                    <SoundwaveIcon className="size-4" />
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent side="top">Voice Mode</TooltipContent>
+              </Tooltip>
+            )}
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  type="submit"
+                  size="icon"
+                  disabled={!canSend}
+                  aria-label={sendLabel}
+                  onClick={(e) => e.stopPropagation()}
+                  className={cn(
+                    "size-8.5 rounded-full bg-[#2563eb] hover:bg-[#1d4ed8] text-white shadow-sm transition-all duration-150 active:scale-95 shrink-0",
+                    !canSend && "opacity-40 cursor-not-allowed",
+                  )}
+                >
+                  <ArrowUpIcon className="size-4.5 stroke-[2.5]" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent side="top">{sendLabel}</TooltipContent>
+            </Tooltip>
+          </div>
         )}
       </div>
     </form>

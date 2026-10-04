@@ -1,150 +1,251 @@
 # 🐬 Dolphin AI — Next-Gen Multi-Modal AI Assistant
 
-<p align="center">
-  <strong>A production-ready, privacy-first AI Assistant powered by Local Ollama Models with seamless Cloud AI Fallbacks, Real-Time WebRTC Voice Mode, and Multi-Modal Vision capabilities.</strong>
-</p>
+> **A production-ready, privacy-first AI assistant powered by local Ollama models with seamless cloud AI fallbacks, real-time WebRTC voice mode, multi-modal vision, and document processing.**
+
+[![GitHub](https://img.shields.io/badge/GitHub-AbdullahAhmed922%2FDolphin-blue?logo=github)](https://github.com/AbdullahAhmed922/Dolphin)
+
+---
+
+## ✨ Features & Previews
+
+### 🏠 1. Local-First & Privacy-Focused
+
+Prioritises local Ollama models (`qwen2.5:3b`, `llama3.2`, `gemma3`) and managed cloud models (`gemma4:31b:cloud`) — your data never leaves your machine unless you choose cloud fallback.
 
 <p align="center">
-  <a href="#-features">Features</a> •
-  <a href="#-tech-stack">Tech Stack</a> •
-  <a href="#-architecture">Architecture</a> •
-  <a href="#-quick-start">Quick Start</a> •
-  <a href="#-docker-deployment">Docker</a> •
-  <a href="#-testing--quality-assurance">Testing</a>
+  <img src="./assets/screenshots/chat-dashboard.png" alt="Dolphin AI Main Dashboard" width="800" />
 </p>
 
 ---
 
-## ✨ Key Features
+### ⚡ 2. Dynamic Model Selection & Cloud Fallbacks
 
-- **🏠 Local-First AI Engine**: Prioritizes local Ollama models (`qwen2.5:3b`, `llama3.2`, `gemma3`, etc.) to run completely offline on your machine for 100% data privacy.
-- **☁️ Automatic Cloud Fallbacks**: Seamlessly fails over to leading cloud providers (Anthropic Claude 3.5, OpenAI GPT-4o, Google Gemini, xAI Grok, Meta Llama) if local models are uninstalled or unreachable.
-- **🎙️ Real-Time Voice Conversations**: Powered by LiveKit Cloud WebRTC, featuring speech-to-text (STT), turn detection, turn interruption, and text-to-speech (TTS).
-- **👁️ Privacy-First Vision**: Supports photo analysis with client-side image scaling (2048px max edge) and automatic EXIF/GPS metadata removal before sending to models.
-- **📄 Native Document Handling**: Upload, preview, and process text and document files directly within your chat conversations.
-- **⚡ Dynamic Live Model Switching**: Automatically populates available Ollama models and cloud provider models dynamically without restarting services.
-- **💾 Local History Storage**: Full chat history and image attachments are stored safely in IndexedDB inside the user's browser.
-- **🎨 Premium UX**: Modern Next.js 16 App Router UI with Tailwind CSS, shadcn/ui components, dynamic voice visualizer, and custom dark mode styling.
+Switch seamlessly between local Ollama models and 5 cloud providers (Anthropic, OpenAI, Google Gemini, Grok, Meta Llama) directly from the in-app model picker — no restart required.
+
+<p align="center">
+  <img src="./assets/screenshots/model-picker.png" alt="Dynamic Model Selector" width="500" />
+</p>
+
+---
+
+### 📊 3. Rich Markdown, Data Tables & Document Processing
+
+Native rendering for code blocks with syntax highlighting, formatted data tables, structured project plans, and uploaded document attachments (PDF, code files, plain text).
+
+<p align="center">
+  <img src="./assets/screenshots/chat-tables.png" alt="Rich Markdown & Data Tables" width="800" />
+</p>
+
+---
+
+### 📷 4. Multi-Modal Vision
+
+Attach photos via camera, paste, or drag-and-drop. Vision-capable models (`gemma3`, `qwen2.5vl`, `llava`, and cloud equivalents) automatically analyse the images in context.
+
+---
+
+### 🎙️ 5. Real-Time WebRTC Voice Conversations
+
+Powered by LiveKit for low-latency speech-to-text (AssemblyAI), intelligent turn detection, adaptive interruption handling, and expressive text-to-speech (Fish Audio). Includes noise cancellation via ai-coustics.
+
+<p align="center">
+  <img src="./assets/screenshots/voice-mode.png" alt="Real-Time WebRTC Voice Mode" width="800" />
+</p>
+
+<p align="center">
+  <img src="./assets/screenshots/voice-thinking.png" alt="Voice Mode — Thinking State" width="800" />
+</p>
+
+---
+
+## 🤖 Supported Models
+
+| Category | Model | Description |
+| :--- | :--- | :--- |
+| **Managed Cloud** | `gemma4:31b:cloud` | Google Gemma 4 31B via Ollama Cloud |
+| **Local Ollama** | `qwen2.5:3b`, `llama3.2`, `gemma3:4b` | Offline models running locally |
+| **Vision & Photos** | `gemma3`, `qwen2.5vl`, `llava`, `llama4` | Multi-modal image analysis |
+| **Voice Agent (Integrated)** | Via API (`app` mode) | Uses the same backend as chat — supports local + cloud |
+| **Voice Agent (SonicAi)** | `google/gemma-4-31b-it` | Standalone LiveKit agent |
+| **Cloud — Anthropic** | Claude 3.5 / Claude 4 | Automatic fallback |
+| **Cloud — OpenAI** | GPT-4o / GPT-4.1 / GPT-5 | Automatic fallback |
+| **Cloud — Google** | Gemini 2.5 Flash / Pro | Automatic fallback |
+| **Cloud — Grok** | Grok-4 / Grok-5 | Automatic fallback |
+| **Cloud — Meta** | Llama-4 | Automatic fallback |
+
+Cloud fallback priority is configurable via `CLOUD_PRIORITY` in `.env`.
 
 ---
 
 ## 🛠️ Tech Stack
 
-| Tier | Technologies |
+| Layer | Technologies |
 | :--- | :--- |
-| **Frontend** | Node.js 24, Next.js 16 (App Router), React 19, TypeScript 7, Tailwind CSS 4, shadcn/ui, Lucide Icons |
-| **Backend API** | Python 3.13, FastAPI, `uv` Package Manager, Ruff, Pytest, Ollama Python SDK, OpenAI & Anthropic SDKs |
-| **Voice Agent** | LiveKit Agent Framework (Python), LiveKit Cloud Inference Engine |
-| **Local AI** | Ollama Engine (`localhost:11434`) |
-| **Containers** | Docker, Docker Compose |
+| **Frontend** | Next.js 16.3, React 19.2, TypeScript 7, Tailwind CSS 4, shadcn/ui, Radix UI, Geist Font |
+| **Backend** | Python 3.13, FastAPI, Pydantic v2, Ollama SDK, OpenAI SDK, Anthropic SDK, PyMuPDF |
+| **Voice Agent** | LiveKit Agents Framework, AssemblyAI STT, Fish Audio TTS, ai-coustics Noise Cancellation |
+| **Tooling** | `uv` (Python), `npm` (Node.js), Ruff (linting/formatting), Pytest |
+| **Deployment** | Docker & Docker Compose |
 
 ---
 
-## 🏗️ Architecture & Project Structure
+## 📂 Project Structure
 
 ```
-agents/
-└── ai-assistant/
-    ├── api/                   # FastAPI Backend (Python 3.13)
-    │   ├── app/
-    │   │   ├── routes/        # Chat, Health, Models, Voice, Upload endpoints
-    │   │   ├── providers/     # Ollama, OpenAI, Anthropic, Gemini, Grok plugins
-    │   │   ├── services/      # Chat orchestrator and fallback logic
-    │   │   └── voice/         # LiveKit session generator and voice settings
-    │   └── tests/             # Pytest test suite
-    ├── web/                   # Next.js Frontend (React 19)
-    │   ├── app/               # Main layout and page routes
-    │   ├── components/        # Chat app, Voice bar, Document tray, Photo gallery
-    │   └── hooks/             # Custom hooks for state management
-    ├── agent/                 # LiveKit Voice Agent worker
-    └── docker-compose.yml     # Multi-container orchestration
+Dolphin/
+├── ai-assistant/                  # Main application
+│   ├── api/                       # FastAPI backend (port 8000)
+│   │   ├── app/
+│   │   │   ├── core/              # Config, logging, middleware
+│   │   │   ├── providers/         # Ollama, OpenAI-compat, Anthropic
+│   │   │   ├── routes/            # /api/chat, /api/models, /api/health, /api/upload
+│   │   │   ├── services/          # Chat orchestration
+│   │   │   ├── voice/             # LiveKit voice session management
+│   │   │   ├── documents.py       # PDF & code file extraction
+│   │   │   ├── images.py          # Photo handling
+│   │   │   └── vision.py          # Vision model detection
+│   │   └── tests/                 # Pytest suite
+│   ├── agent/                     # Integrated LiveKit voice agent (Docker)
+│   │   ├── voice_agent.py         # LiveKit agent entry point
+│   │   ├── app_llm.py             # Routes voice LLM calls through the API
+│   │   └── settings.py            # Agent configuration
+│   ├── web/                       # Next.js frontend (port 3000)
+│   │   ├── components/
+│   │   │   ├── chat/              # Composer, messages, model picker, sidebar
+│   │   │   ├── voice/             # Voice bar, visualiser, session management
+│   │   │   ├── photos/            # Photo gallery, attachment tray, viewer
+│   │   │   └── documents/         # Document upload tray
+│   │   └── app/                   # Next.js App Router pages
+│   └── docker-compose.yml         # Full-stack orchestration
+├── SonicAi/                       # Standalone LiveKit voice agent
+│   ├── agent.py                   # Agent entry point (gemma-4-31b-it)
+│   └── app.py                     # Gradio web UI
+└── assets/screenshots/            # README screenshots
 ```
 
 ---
 
-## 🚀 Quick Start Guide
+## 🚀 Quick Start
 
 ### Prerequisites
-- **Node.js** v20.9+ or v24+
-- **Python** v3.13+ with [`uv`](https://docs.astral.sh/uv/) installed
-- **Ollama** (Optional, for running local models): [Download Ollama](https://ollama.com)
 
----
+- **Node.js** ≥ 20.9
+- **Python** ≥ 3.13
+- **uv** (Python package manager)
+- **Ollama** (optional, for local models)
 
-### Step 1: Run Local Models (Optional)
+### Step 1 — Pull Ollama Models (Optional)
+
 ```bash
-ollama pull llama3.2
 ollama pull qwen2.5:3b
+ollama pull llama3.2
+ollama pull gemma4:31b:cloud
 ```
 
-### Step 2: Start Backend API
+### Step 2 — Start Backend API
+
 ```bash
 cd ai-assistant/api
+cp .env.example .env       # Configure API keys for cloud fallback
 uv sync
-cp .env.example .env
-
-# Start FastAPI dev server (Runs on http://localhost:8000)
 uv run fastapi dev app/main.py
+# → http://localhost:8000
+# → http://localhost:8000/docs (Swagger UI)
 ```
 
-### Step 3: Start Frontend Web Client
+### Step 3 — Start Frontend
+
 ```bash
-# Open a new terminal
 cd ai-assistant/web
-npm install
 cp .env.example .env.local
-
-# Start Next.js dev server (Runs on http://localhost:3000)
+npm install
 npm run dev
+# → http://localhost:3000
 ```
 
-### Step 4: Start LiveKit Voice Agent (Optional)
-```bash
-# Open a new terminal (API must be running first)
-cd ai-assistant/agent
-uv sync
-cp .env.example .env
+### Step 4 — Start Voice Agent (Optional)
 
-# Run Voice Agent
+**Option A — Integrated agent** (routes LLM through the backend API):
+
+```bash
+cd ai-assistant/agent
+cp .env.example .env       # Set LIVEKIT_URL, LIVEKIT_API_KEY, LIVEKIT_API_SECRET
+uv sync
 uv run python voice_agent.py dev
+```
+
+**Option B — SonicAi standalone** (direct LLM via LiveKit Inference):
+
+```bash
+cd SonicAi
+uv sync
+uv run python agent.py dev
 ```
 
 ---
 
 ## 🐳 Docker Deployment
 
-To launch the complete stack with a single command:
+### Core Stack (API + Web)
 
 ```bash
 cd ai-assistant
 cp api/.env.example api/.env
-
-# Build and launch all services
 docker compose up --build
+```
 
-# Or include Voice Agent container:
+### With Voice Agent
+
+```bash
 docker compose --profile voice up --build
+```
+
+### With Ollama in Docker
+
+```bash
+docker compose --profile ollama up --build
+# Then set OLLAMA_HOST=http://ollama:11434 in api/.env
 ```
 
 ---
 
-## 🧪 Testing & Quality Assurance
+## ⚙️ Environment Variables
+
+All configuration is done through `.env` files. See [`ai-assistant/api/.env.example`](./ai-assistant/api/.env.example) for the full reference.
+
+| Variable | Purpose |
+| :--- | :--- |
+| `OLLAMA_ENABLED` / `OLLAMA_HOST` | Enable local Ollama and set its URL |
+| `ALLOW_CLOUD_FALLBACK` | Try cloud providers when local models fail |
+| `CLOUD_PRIORITY` | Order of cloud provider fallback |
+| `ANTHROPIC_API_KEY` | Enable Anthropic (Claude) |
+| `OPENAI_API_KEY` | Enable OpenAI (GPT-4o, etc.) |
+| `GEMINI_API_KEY` | Enable Google Gemini |
+| `GROK_API_KEY` | Enable Grok |
+| `META_API_KEY` | Enable Meta Llama |
+| `LIVEKIT_URL` / `LIVEKIT_API_KEY` / `LIVEKIT_API_SECRET` | Enable voice mode |
+| `MAX_IMAGES_PER_MESSAGE` / `MAX_IMAGE_BYTES` | Photo upload limits |
+| `VISION_MODELS` | Extra patterns for vision-capable models |
+
+---
+
+## 🧪 Testing
 
 ```bash
-# Run backend tests & lint checks
 cd ai-assistant/api
-uv run ruff check .
-uv run ruff format --check .
-uv run pytest
-
-# Run frontend type check & production build validation
-cd ai-assistant/web
-npm run typecheck
-npm run build
+uv run pytest           # Run the test suite
+uv run ruff check .     # Lint
+uv run ruff format .    # Format
 ```
+
+---
+
+## 👤 Author
+
+**Abdullah Ahmed** — [abd1962964@gmail.com](mailto:abd1962964@gmail.com)
 
 ---
 
 ## 📄 License
 
-Distributed under the **MIT License**. See `LICENSE` for more information.
+Distributed under the **MIT License**.

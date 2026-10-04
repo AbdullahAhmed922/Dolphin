@@ -1,13 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowDownIcon, PencilIcon } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { ArrowDownIcon } from "lucide-react";
 import { Message } from "@/components/chat/message";
 import { Button } from "@/components/ui/button";
 import type { Conversation } from "@/lib/types";
@@ -19,13 +13,12 @@ export function MessageList({
   streaming,
   onRegenerate,
   onFeedback,
-  onRename,
 }: {
   conversation: Conversation;
   streaming: boolean;
   onRegenerate: (id: string) => void;
   onFeedback: (id: string, value: "up" | "down") => void;
-  onRename: (id: string, title: string) => void;
+  onRename?: (id: string, title: string) => void;
 }) {
   const scroller = useRef<HTMLDivElement>(null);
   const stick = useRef(true);
@@ -51,31 +44,13 @@ export function MessageList({
   }, [conversation.messages]);
 
   return (
-    <div className="relative min-h-0 flex-1">
-      <div className="flex items-center justify-between px-4 py-2 border-b bg-background/50 sticky top-0 z-10 backdrop-blur">
-        <h2 className="text-sm font-medium truncate">{conversation.title}</h2>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon-sm" className="h-8 w-8">
-              <PencilIcon className="size-3.5" />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuItem onSelect={() => {
-              const newTitle = prompt("Rename chat:", conversation.title);
-              if (newTitle && newTitle !== conversation.title) onRename(conversation.id, newTitle);
-            }}>
-              Rename
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
+    <div className="relative flex flex-col min-h-0 flex-1 overflow-hidden">
       <div
         ref={scroller}
         role="log"
         aria-live="polite"
         aria-busy={streaming}
-        className="h-full overflow-y-auto overscroll-contain"
+        className="min-h-0 flex-1 overflow-y-auto overscroll-contain"
         onScroll={() => {
           stick.current = nearBottom();
           setShowJump(!stick.current);
