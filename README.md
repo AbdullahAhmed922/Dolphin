@@ -244,8 +244,3 @@ uv run ruff format .    # Format
 
 **Abdullah Ahmed** — [abd1962964@gmail.com](mailto:abd1962964@gmail.com)
 
----
-
-## 📄 License
-
-Distributed under the **MIT License**.
